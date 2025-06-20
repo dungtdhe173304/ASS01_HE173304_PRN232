@@ -1,0 +1,39 @@
+@page "{id:int}"
+@model eStoreClient.Pages.Admin.Products.DetailsModel
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<h1>Product Details</h1>
+
+<div class="card mb-4">
+    <div class="card-header">
+        @Model.Product.ProductName
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.Product.ProductId</dd>
+            
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.Product.ProductName</dd>
+            
+            <dt class="col-sm-3">Category</dt>
+            <dd class="col-sm-9">@(Model.Product.Category?.CategoryName ?? "N/A")</dd>
+            
+            <dt class="col-sm-3">Price</dt>
+            <dd class="col-sm-9">@Model.Product.UnitPrice?.ToString("C")</dd>
+            
+            <dt class="col-sm-3">Weight</dt>
+            <dd class="col-sm-9">@(Model.Product.Weight ?? "N/A")</dd>
+            
+            <dt class="col-sm-3">Stock</dt>
+            <dd class="col-sm-9">@Model.Product.UnitsInStock</dd>
+        </dl>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Product.ProductId" class="btn btn-primary">Edit</a>
+    <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+</div>

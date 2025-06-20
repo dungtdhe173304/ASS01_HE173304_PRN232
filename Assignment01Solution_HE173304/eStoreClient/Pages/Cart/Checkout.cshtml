@@ -1,0 +1,91 @@
+@page
+@model eStoreClient.Pages.Cart.CheckoutModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h1>Checkout</h1>
+
+@if (!Model.CartItems.Any())
+{
+    <div class="alert alert-warning">
+        Your cart is empty. <a asp-page="/Products/Index">Continue shopping</a>
+    </div>
+    return;
+}
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Order Details</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label asp-for="Order.RequiredDate" class="form-label">Required Date</label>
+                        <input asp-for="Order.RequiredDate" type="date" class="form-control" 
+                               min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="Order.RequiredDate" class="text-danger"></span>
+                        <small class="text-muted">Please select when you need this order (minimum 1 day from today)</small>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Order.Freight" class="form-label">Shipping Cost</label>
+                        <input asp-for="Order.Freight" class="form-control" readonly />
+                        <span asp-validation-for="Order.Freight" class="text-danger"></span>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Place Order</button>
+                        <a asp-page="/Cart/Index" class="btn btn-outline-secondary">Back to Cart</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Order Summary</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th class="text-end">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.Quantity</td>
+                                <td class="text-end">@item.Total.ToString("C")</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">Subtotal:</th>
+                            <th class="text-end">@Model.SubTotal.ToString("C")</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Shipping:</th>
+                            <th class="text-end">@(Model.Order.Freight?.ToString("C") ?? "$0.00")</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Total:</th>
+                            <th class="text-end">@Model.TotalPrice.ToString("C")</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

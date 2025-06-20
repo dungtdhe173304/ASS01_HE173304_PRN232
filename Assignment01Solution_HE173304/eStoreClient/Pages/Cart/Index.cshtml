@@ -1,0 +1,78 @@
+@page
+@model eStoreClient.Pages.Cart.IndexModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<h1>Shopping Cart</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (!Model.CartItems.Any())
+{
+    <div class="alert alert-info">
+        Your cart is empty. <a asp-page="/Products/Index">Continue shopping</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.UnitPrice.ToString("C")</td>
+                        <td>
+                            <form asp-page-handler="updatequantity" method="post" class="d-flex align-items-center">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control form-control-sm" style="width: 70px;" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary ms-2">Update</button>
+                            </form>
+                        </td>
+                        <td>@item.Total.ToString("C")</td>
+                        <td>
+                            <form asp-page-handler="remove" method="post">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3" class="text-end">Grand Total:</th>
+                    <th>@Model.TotalPrice.ToString("C")</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+        <a asp-page="/Products/Index" class="btn btn-secondary">Continue Shopping</a>
+        <div>
+            <form asp-page-handler="clear" method="post" class="d-inline">
+                <button type="submit" class="btn btn-warning">Clear Cart</button>
+            </form>
+            <a asp-page="/Cart/Checkout" class="btn btn-success ms-2">Proceed to Checkout</a>
+        </div>
+    </div>
+}

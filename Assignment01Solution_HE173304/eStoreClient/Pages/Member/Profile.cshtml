@@ -1,0 +1,54 @@
+@page
+@model eStoreClient.Pages.Member.ProfileModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<h1>My Profile</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MemberProfile.MemberId" />
+            
+            <div class="mb-3">
+                <label asp-for="MemberProfile.Email" class="form-label"></label>
+                <input asp-for="MemberProfile.Email" class="form-control" />
+                <span asp-validation-for="MemberProfile.Email" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="MemberProfile.CompanyName" class="form-label"></label>
+                <input asp-for="MemberProfile.CompanyName" class="form-control" />
+                <span asp-validation-for="MemberProfile.CompanyName" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="MemberProfile.City" class="form-label"></label>
+                <input asp-for="MemberProfile.City" class="form-control" />
+                <span asp-validation-for="MemberProfile.City" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="MemberProfile.Country" class="form-label"></label>
+                <input asp-for="MemberProfile.Country" class="form-control" />
+                <span asp-validation-for="MemberProfile.Country" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="MemberProfile.Password" class="form-label"></label>
+                <input asp-for="MemberProfile.Password" class="form-control" type="password" />
+                <span asp-validation-for="MemberProfile.Password" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

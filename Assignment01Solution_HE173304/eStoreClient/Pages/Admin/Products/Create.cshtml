@@ -1,0 +1,56 @@
+@page
+@model eStoreClient.Pages.Admin.Products.CreateModel
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<h1>Create Product</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Product.ProductId" class="form-label"></label>
+                <input asp-for="Product.ProductId" class="form-control" />
+                <span asp-validation-for="Product.ProductId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Product.ProductName" class="form-label"></label>
+                <input asp-for="Product.ProductName" class="form-control" />
+                <span asp-validation-for="Product.ProductName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Product.CategoryId" class="form-label">Category</label>
+                <select asp-for="Product.CategoryId" class="form-select" asp-items="Model.Categories">
+                    <option value="">-- Select Category --</option>
+                </select>
+                <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Product.UnitPrice" class="form-label"></label>
+                <input asp-for="Product.UnitPrice" class="form-control" />
+                <span asp-validation-for="Product.UnitPrice" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Product.Weight" class="form-label"></label>
+                <input asp-for="Product.Weight" class="form-control" />
+                <span asp-validation-for="Product.Weight" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Product.UnitsInStock" class="form-label"></label>
+                <input asp-for="Product.UnitsInStock" class="form-control" />
+                <span asp-validation-for="Product.UnitsInStock" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

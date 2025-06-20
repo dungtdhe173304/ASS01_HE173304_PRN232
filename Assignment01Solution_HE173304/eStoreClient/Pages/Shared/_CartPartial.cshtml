@@ -1,0 +1,16 @@
+@using eStoreClient.Services
+@inject CartService CartService
+@{
+    int itemCount = CartService.GetTotalItems();
+}
+
+<a class="nav-link text-dark position-relative" asp-page="/Cart/Index">
+    <i class="fas fa-shopping-cart"></i> Cart
+    @if (itemCount > 0)
+    {
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            @itemCount
+            <span class="visually-hidden">items in cart</span>
+        </span>
+    }
+</a>

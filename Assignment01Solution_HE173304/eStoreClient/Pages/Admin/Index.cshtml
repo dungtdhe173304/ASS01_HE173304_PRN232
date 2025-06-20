@@ -1,0 +1,136 @@
+@page
+@model eStoreClient.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h1>Admin Dashboard</h1>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white mb-4">
+            <div class="card-body">
+                <h4 class="card-title">Members</h4>
+                <h2 class="display-4">@Model.MemberCount</h2>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="text-white stretched-link" asp-page="./Members/Index">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">
+                <h4 class="card-title">Products</h4>
+                <h2 class="display-4">@Model.ProductCount</h2>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="text-white stretched-link" asp-page="./Products/Index">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white mb-4">
+            <div class="card-body">
+                <h4 class="card-title">Categories</h4>
+                <h2 class="display-4">@Model.CategoryCount</h2>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="text-white stretched-link" asp-page="./Categories/Index">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white mb-4">
+            <div class="card-body">
+                <h4 class="card-title">Orders</h4>
+                <h2 class="display-4">@Model.OrderCount</h2>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="text-white stretched-link" asp-page="./Orders/Index">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                Recent Orders
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Member</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.RecentOrders)
+                        {
+                            <tr>
+                                <td>@order.OrderId</td>
+                                <td>@(order.Member?.Email ?? "N/A")</td>
+                                <td>@(order.OrderDate?.ToString("yyyy-MM-dd") ?? "N/A")</td>
+                                <td>
+                                    @if (order.ShippedDate.HasValue)
+                                    {
+                                        <span class="badge bg-success">Shipped</span>
+                                    }
+                                    else if (order.OrderDate.HasValue)
+                                    {
+                                        <span class="badge bg-warning">Processing</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Pending</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                Low Stock Products
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model.LowStockProducts)
+                        {
+                            <tr>
+                                <td>@product.ProductId</td>
+                                <td>@product.ProductName</td>
+                                <td>
+                                    <span class="@(product.UnitsInStock < 5 ? "text-danger" : "text-warning")">
+                                        @product.UnitsInStock
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

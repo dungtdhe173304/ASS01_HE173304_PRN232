@@ -1,0 +1,73 @@
+@page
+@model eStoreClient.Pages.Products.DetailsModel
+@{
+    ViewData["Title"] = $"Product - {Model.Product.ProductName}";
+}
+
+<div class="container mt-4">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-6">
+            <h1>@Model.Product.ProductName</h1>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Product Information</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">Category:</dt>
+                        <dd class="col-sm-8">@(Model.Product.Category?.CategoryName ?? "N/A")</dd>
+
+                        <dt class="col-sm-4">Price:</dt>
+                        <dd class="col-sm-8">@Model.Product.UnitPrice?.ToString("C")</dd>
+                        
+                        <dt class="col-sm-4">Weight:</dt>
+                        <dd class="col-sm-8">@(Model.Product.Weight ?? "N/A")</dd>
+                        
+                        <dt class="col-sm-4">In Stock:</dt>
+                        <dd class="col-sm-8">@Model.Product.UnitsInStock</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order Information</h5>
+                    @if (Model.Product.UnitsInStock > 0)
+                    {
+                        <form method="post">
+                            <div class="mb-3">
+                                <label asp-for="Quantity" class="form-label">Quantity</label>
+                                <input asp-for="Quantity" type="number" class="form-control" min="1" max="@Model.Product.UnitsInStock" value="1" />
+                                <span asp-validation-for="Quantity" class="text-danger"></span>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                <a asp-page="./Index" class="btn btn-secondary">Back to Products</a>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            This product is out of stock.
+                        </div>
+                        <div class="d-grid gap-2">
+                            <a asp-page="./Index" class="btn btn-secondary">Back to Products</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

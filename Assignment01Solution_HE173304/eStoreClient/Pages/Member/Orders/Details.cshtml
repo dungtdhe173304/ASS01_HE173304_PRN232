@@ -1,0 +1,124 @@
+@page
+@model eStoreClient.Pages.Member.Orders.DetailsModel
+@{
+    ViewData["Title"] = $"Order #{Model.Order.OrderId}";
+}
+
+<h1>Order #@Model.Order.OrderId</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Order Information</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Order Date:</dt>
+                    <dd class="col-sm-8">@(Model.Order.OrderDate?.ToString("yyyy-MM-dd") ?? "N/A")</dd>
+                    
+                    <dt class="col-sm-4">Required Date:</dt>
+                    <dd class="col-sm-8">@(Model.Order.RequiredDate?.ToString("yyyy-MM-dd") ?? "N/A")</dd>
+                    
+                    <dt class="col-sm-4">Shipped Date:</dt>
+                    <dd class="col-sm-8">@(Model.Order.ShippedDate?.ToString("yyyy-MM-dd") ?? "Not Shipped Yet")</dd>
+                    
+                    <dt class="col-sm-4">Shipping Cost:</dt>
+                    <dd class="col-sm-8">@(Model.Order.Freight?.ToString("C") ?? "N/A")</dd>
+                    
+                    <dt class="col-sm-4">Status:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Order.ShippedDate.HasValue)
+                        {
+                            <span class="badge bg-success">Shipped</span>
+                        }
+                        else if (Model.Order.OrderDate.HasValue)
+                        {
+                            <span class="badge bg-warning">Processing</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Pending</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Summary</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-6">Total Items:</dt>
+                    <dd class="col-sm-6">@Model.OrderDetails.Sum(od => od.Quantity)</dd>
+                    
+                    <dt class="col-sm-6">Subtotal:</dt>
+                    <dd class="col-sm-6">@Model.Subtotal.ToString("C")</dd>
+                    
+                    <dt class="col-sm-6">Shipping Cost:</dt>
+                    <dd class="col-sm-6">@(Model.Order.Freight?.ToString("C") ?? "$0.00")</dd>
+                    
+                    <dt class="col-sm-6">Total:</dt>
+                    <dd class="col-sm-6">@Model.Total.ToString("C")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Order Items</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Discount</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        <tr>
+                            <td>
+                                @(item.Product?.ProductName ?? "Unknown Product")
+                            </td>
+                            <td>@item.UnitPrice?.ToString("C")</td>
+                            <td>@item.Quantity</td>
+                            <td>@(item.Discount?.ToString("P0") ?? "0%")</td>
+                            <td class="text-end">
+                                @{
+                                    decimal itemTotal = (item.UnitPrice ?? 0) * (item.Quantity ?? 0);
+                                    decimal discountAmount = itemTotal * (decimal)(item.Discount ?? 0);
+                                    decimal finalPrice = itemTotal - discountAmount;
+                                }
+                                @finalPrice.ToString("C")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-page="./Index" class="btn btn-secondary">Back to Orders</a>
+</div>
